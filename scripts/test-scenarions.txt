@@ -1,0 +1,8 @@
+Testing Scenarios
+Normal flow - Upload image, verify processing, download result
+
+Load testing - Upload 100+ images, monitor queue performance
+
+Error handling - Upload corrupt images, verify DLQ handling
+
+Scale testing - Monitor auto-scaling of Lambda functions

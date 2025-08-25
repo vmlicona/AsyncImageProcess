@@ -1,0 +1,16 @@
+aws:
+  region: us-east-2
+  s3:
+    originalBucket: your-app-original-images
+    processedBucket: your-app-processed-images
+  sqs:
+    processingQueueUrl: https://sqs.us-east-2.amazonaws.com/492149691622/image-processing-queue
+  dynamodb:
+    statusTable: ImageProcessingStatus
+
+app:
+  image:
+    maxWidth: 1920
+    maxHeight: 1080
+    defaultFormat: JPEG
+    quality: 90
