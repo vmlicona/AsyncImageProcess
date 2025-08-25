@@ -7,6 +7,7 @@ import com.example.imageprocessor.model.ProcessMessage;
 import com.example.imageprocessor.util.DynamoDbUtil;
 import com.example.imageprocessor.util.S3Util;
 import com.example.imageprocessor.util.ImageUtil;
+import com.example.imageprocessor.util.SnsUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,8 +44,14 @@ public class ImageProcessHandler implements RequestHandler<SQSEvent, Void> {
                 DynamoDbUtil.updateStatus(processMessage.getImageId(), "COMPLETED", "Image processing completed successfully");
                 log.info("Image processing completed: {}", processMessage.getImageId());
 
+                SnsUtil.sendSuccessNotification(
+                        processMessage.getImageId(),
+                        "s3://my-app-processed-images/" + processMessage.getProcessedKey()
+                );
+
             } catch (Exception e) {
                 log.error("Failed to process message: {}", message.getBody(), e);
+                SnsUtil.sendFailureNotification(getImageIdFromMessage(message.getBody()), e.getMessage());
                 DynamoDbUtil.updateStatus(getImageIdFromMessage(message.getBody()), "FAILED", "Processing failed: " + e.getMessage());
             }
         }

@@ -6,10 +6,7 @@ import com.example.imageprocessor.model.ApiRequest;
 import com.example.imageprocessor.model.ApiResponse;
 import com.example.imageprocessor.model.ImageRequest;
 import com.example.imageprocessor.model.ProcessMessage;
-import com.example.imageprocessor.util.DynamoDbUtil;
-import com.example.imageprocessor.util.JsonUtil;
-import com.example.imageprocessor.util.S3Util;
-import com.example.imageprocessor.util.SqsUtil;
+import com.example.imageprocessor.util.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -47,6 +44,12 @@ public class ImageUploadHandler implements RequestHandler<ApiRequest, ApiRespons
             message.setOptions(imageRequest.getOptions());
 
             SqsUtil.sendProcessMessage(message);
+
+            SnsUtil.sendProcessingNotification(
+                    imageId,
+                    "QUEUED",
+                    "Image uploaded and queued for processing"
+            );
 
             log.info("Image uploaded and queued for processing: {}", imageId);
 

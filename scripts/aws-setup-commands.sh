@@ -13,3 +13,11 @@ aws dynamodb create-table \
     --key-schema \
         AttributeName=imageId,KeyType=HASH \
     --billing-mode PAY_PER_REQUEST
+
+aws sns create-topic --name image-processing-notifications --region us-east-2
+
+aws sns subscribe \
+  --topic-arn arn:aws:sns:us-east-2:492149691622:image-processing-notifications \
+  --protocol email \
+  --notification-endpoint vmlicona@gmail.com \
+  --region us-east-2

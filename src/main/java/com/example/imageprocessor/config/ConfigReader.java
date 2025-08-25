@@ -60,6 +60,10 @@ public class ConfigReader {
         return getNestedValue("aws.dynamodb.statusTable");
     }
 
+    public static String getSns() {
+        return getNestedValue("aws.sns.notificationTopicArn");
+    }
+
     // Generic method to get nested values from the map
     @SuppressWarnings("unchecked")
     private static <T> T getNestedValue(String keyPath, T defaultValue) {
